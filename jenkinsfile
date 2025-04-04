@@ -1,29 +1,31 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vishnuofficial164/addressbook.git'
+                git branch: 'Master', url: 'https://github.com/vishnuofficial164/addressbook.git'
             }
         }
+
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
+
         stage('Docker Build') {
             steps {
                 sh 'docker build -t addressbook .'
             }
         }
+
         stage('Run Container') {
             steps {
-                script {
-                    def port = 9090  // Change this port if needed
-                    sh "docker run -d -e PORT=${port} -p ${port}:${port} addressbook"
-                }
+                sh 'docker run -d -p 8080:8080 addressbook'
             }
         }
     }
 }
+
 
