@@ -1,29 +1,27 @@
 pipeline {
     agent any
-
-    tools {
-        maven 'maven' // Make sure this matches the name in Global Tool Configuration
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'Master', url: 'https://github.com/vishnuofficial164/addressbook.git'
+                git 'https://github.com/vishnuofficial164/addressbook.git'
             }
         }
-        
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
         }
-        
-        stage('Docker Build & Run') {
+        stage('Docker Build') {
             steps {
-                sh '''
-                docker build -t addressbook .
-                docker run -d -p 8080:8080 addressbook
-                '''
+                sh 'docker build -t addressbook .'
+            }
+        }
+        stage('Run Container') {
+            steps {
+                script {
+                    def port = 9090  // Change this port if needed
+                    sh "docker run -d -e PORT=${port} -p ${port}:${port} addressbook"
+                }
             }
         }
     }
