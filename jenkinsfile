@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven' 
+        maven 'Maven' // Make sure this matches the name in Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vishnuofficial164/addressbook.git'
+                git branch: 'master', url: 'https://github.com/vishnuofficial164/addressbook.git'
             }
         }
         
@@ -28,3 +28,4 @@ pipeline {
         }
     }
 }
+
