@@ -16,16 +16,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker buildx -t addressbook .'
+                sh 'docker buildx build -t addressbook .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 8080:8080 addressbook'
+                sh 'docker run -d -p 8081:8080 --name addressbook_container addressbook'
             }
         }
     }
 }
-
-
