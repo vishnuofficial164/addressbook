@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3' 
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/vishnuofficial164/addressbook.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        
+        stage('Docker Build & Run') {
+            steps {
+                sh '''
+                docker build -t addressbook .
+                docker run -d -p 8080:8080 addressbook
+                '''
+            }
+        }
+    }
+}
